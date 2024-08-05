@@ -108,10 +108,29 @@ async function createProject() {
             execSync('pnpm install -D tailwindcss@latest postcss@latest autoprefixer@latest', { cwd: projectPath, stdio: 'inherit' });
             execSync('npx tailwindcss init -p', { cwd: projectPath, stdio: 'inherit' });
             const svelteConfigPath = path.join(projectPath, 'svelte.config.js');
-            const tempFileContent = fs.readFileSync('tempSvelteConfigTailwind', 'utf8');
+            const tempFileContent = `import adapter from '@sveltejs/adapter-auto';
+import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
+
+const config = {
+  kit: {
+    alias: {
+      $lib: "./src/lib"
+     },
+    adapter: adapter()
+  },
+  preprocess: vitePreprocess()
+};
+export default config;`;
             fs.writeFileSync(svelteConfigPath, tempFileContent);
             const tailwindConfigPath = path.join(projectPath, 'tailwind.config.js');
-            const tempFileTailwindContent = fs.readFileSync('tempTailwindConfigTailwind', 'utf8');
+            const tempFileTailwindContent = `/** @type {import('tailwindcss').Config} */
+                export default {
+                content: ['./src/**/*.{html,js,svelte,ts}'],
+                theme: {
+                    extend: {}
+                },
+                plugins: []
+                };`;
             fs.writeFileSync(tailwindConfigPath, tempFileTailwindContent);
             const appCss = path.join(projectPath, 'src', 'app.css');
             const appCssContent = `@tailwind base;\n@tailwind components;\n@tailwind utilities;`;
@@ -137,7 +156,85 @@ async function createProject() {
             execSync('pnpm install prisma', { cwd : projectPath, stdio: 'inherit' });
             execSync('pnpm prisma init --datasource-provider sqlite', { cwd: projectPath, stdio: 'inherit' });
             const prismaConfigFile = path.join(projectPath, 'prisma', 'schema.prisma');
-            const prismaConfigContent = fs.readFileSync('tempPrismaConfig', 'utf8');
+            const prismaConfigContent = `// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "postgresql"
+  url  	    = env("DATABASE_URL")
+  directUrl = env("DATABASE_URL_UNPOOLED")
+}
+generator client {
+  provider = "prisma-client-js"
+}
+ 
+model User {
+  id            String          @id @default(cuid())
+  name          String?
+  email         String          @unique
+  emailVerified DateTime?
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+  Authenticator Authenticator[]
+ 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+ 
+model Account {
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+ 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+ 
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+ 
+  @@id([provider, providerAccountId])
+}
+ 
+model Session {
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+ 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+ 
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+ 
+  @@id([identifier, token])
+}
+ 
+model Authenticator {
+  credentialID         String  @unique
+  userId               String
+  providerAccountId    String
+  credentialPublicKey  String
+  counter              Int
+  credentialDeviceType String
+  credentialBackedUp   Boolean
+  transports           String?
+ 
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+ 
+  @@id([userId, credentialID])
+}`;
             fs.writeFileSync(prismaConfigFile, prismaConfigContent);
             execSync('pnpm prisma generate', { cwd: projectPath, stdio: 'inherit' });
             const serverDirPath = path.join(projectPath, 'src', 'lib', 'server');
@@ -150,7 +247,16 @@ async function createProject() {
 
             execSync('pnpm add @auth/sveltekit', { cwd: projectPath, stdio: 'inherit' });
             const authConfigFile = path.join(projectPath, 'src', 'auth.ts');
-            const authConfigContent = fs.readFileSync('tempAuthConfig', 'utf8');
+            const authConfigContent = `import { SvelteKitAuth } from "@auth/sveltekit"
+import Google from "@auth/sveltekit/providers/google"
+import Github from "@auth/sveltekit/providers/github"
+import { PrismaAdapter } from "@auth/prisma-adapter"
+import { prisma } from "$lib/server/prisma"
+ 
+export const { handle, signIn, signOut } = SvelteKitAuth({
+    adapter: PrismaAdapter(prisma),
+    providers: [Google, Github],
+})"`;
             fs.writeFileSync(authConfigFile, authConfigContent);
             execSync('pnpm add @auth/core', { cwd: projectPath, stdio: 'inherit' });
             execSync('pnpm add @prisma/client @auth/prisma-adapter', { cwd: projectPath, stdio: 'inherit' });
@@ -176,7 +282,19 @@ async function createProject() {
         // Init +page.svelte
 
         const pageSvelte = path.join(projectPath, 'src', 'routes', '+page.svelte');
-        const pageSvelteContent = fs.readFileSync('tempPageSvelte', 'utf8');
+        const pageSvelteContent = `<div class="flex flex-col justify-between items-center bg-[#FAF9F6] h-screen w-screen">
+    <div class="relative w-screen mt-[4%]">
+        <p class="absolute left-[5%] border-[#bab8b8] bg-white py-2 border px-4 text-lg w-[17%]">Get started by setup the <span class="font-bold">.env</span> and edit <span class="font-bold">+page.svelte</span></p>
+        <p class="absolute right-[5%] border-[#bab8b8] bg-white py-2 border px-4 text-lg">By <span class="font-bold">Louis Truptil</span></p>
+    </div>
+    <div class="w-screen flex items-center justify-center">
+        <img class="bg-[#FAF9F6]" src="https://github.com/louistruptil/LTPL-stack/blob/main/LTPL_logo_black.png?raw=true" alt="logo">
+    </div>
+    <a href="" class="flex flex-col items-center mb-[4%] border-[#bab8b8] bg-white py-2 border px-4">
+        <p class="font-bold mb-4 text-3xl">Docs ⮕</p>
+        <p class="w-[50%] text-[#787878]">Find all information you need about LTPL Stack</p>
+    </a>
+</div>`;
         fs.writeFileSync(pageSvelte, pageSvelteContent);
         
         console.log('Installing dependencies...');
