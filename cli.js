@@ -256,7 +256,7 @@ import { prisma } from "$lib/server/prisma"
 export const { handle, signIn, signOut } = SvelteKitAuth({
     adapter: PrismaAdapter(prisma),
     providers: [Google, Github],
-})"`;
+})`;
             fs.writeFileSync(authConfigFile, authConfigContent);
             execSync('pnpm add @auth/core', { cwd: projectPath, stdio: 'inherit' });
             execSync('pnpm add @prisma/client @auth/prisma-adapter', { cwd: projectPath, stdio: 'inherit' });
