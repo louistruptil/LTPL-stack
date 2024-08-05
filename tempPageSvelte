@@ -4,7 +4,7 @@
         <p class="absolute right-[5%] border-[#bab8b8] bg-white py-2 border px-4 text-lg">By <span class="font-bold">Louis Truptil</span></p>
     </div>
     <div class="w-screen flex items-center justify-center">
-        <img class="bg-[#FAF9F6]" src="LTPL_logo_black.png" alt="logo">
+        <img class="bg-[#FAF9F6]" src="https://github.com/louistruptil/LTPL-stack/blob/main/LTPL_logo_black.png?raw=true" alt="logo">
     </div>
     <a href="" class="flex flex-col items-center mb-[4%] border-[#bab8b8] bg-white py-2 border px-4">
         <p class="font-bold mb-4 text-3xl">Docs ⮕</p>

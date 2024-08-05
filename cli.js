@@ -178,9 +178,6 @@ async function createProject() {
         const pageSvelte = path.join(projectPath, 'src', 'routes', '+page.svelte');
         const pageSvelteContent = fs.readFileSync('tempPageSvelte', 'utf8');
         fs.writeFileSync(pageSvelte, pageSvelteContent);
-        const sourceImagePath = path.join(__dirname, 'LTPL_logo_black.png');
-        const destinationImagePath = path.join(projectPath, 'static');
-        fs.copyFileSync(sourceImagePath, destinationImagePath);
         
         console.log('Installing dependencies...');
         execSync('pnpm install', { cwd: projectPath, stdio: 'inherit' });
