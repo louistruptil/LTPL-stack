@@ -1,0 +1,17 @@
+{
+  "name": "create-my-stack",
+  "version": "1.0.0",
+  "description": "Create my stack template",
+  "main": "cli.js",
+  "bin": {
+    "create-my-stack": "./cli.js"
+  },
+  "dependencies": {
+    "create-svelte": "^6.3.5",
+    "fs-extra": "^10.0.0",
+    "inquirer": "^8.0.0"
+  },
+  "devDependencies": {
+    "prisma": "^5.17.0"
+  }
+}
