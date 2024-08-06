@@ -59,4 +59,4 @@ Give a ⭐️ if this project helped you!
 ## 📝 License
 
 Copyright © 2024 [Louis Truptil](https://github.com/louistruptil).<br />
-This project is [MIT](https://github.com/kefranabg/readme-md-generator/blob/master/LICENSE) licensed.
+This project is [MIT](https://github.com/louistruptil/LTPL-stack/blob/main/LICENSE) licensed.
