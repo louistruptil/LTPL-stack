@@ -9,7 +9,7 @@
   <a href="https://github.com/kefranabg/readme-md-generator/graphs/commit-activity" target="_blank">
     <img alt="Maintenance" src="https://img.shields.io/badge/Maintained%3F-yes-green.svg" />
   </a>
-  <a href="https://github.com/kefranabg/readme-md-generator/blob/master/LICENSE" target="_blank">
+  <a href="https://github.com/louistruptil/LTPL-stack/blob/main/LICENSE" target="_blank">
     <img alt="License: MIT" src="https://github.com/louistruptil/LTPL-stack/blob/main/LICENSE" />
   </a>
   <a href="https://twitter.com/louismdr" target="_blank">
